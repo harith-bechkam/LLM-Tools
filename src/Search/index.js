@@ -7,67 +7,67 @@ import { Toaster, toast } from "react-hot-toast";
 import './style.css';
 
 export default function SearchAISummary() {
-    const [documents, setDocuments] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [topKFiles, setTopKFiles] = useState(3);
-    const [topKChunks, setTopKChunks] = useState(5);
-    const [searchResult, setSearchResult] = useState("");
-    const [aiSummary, setAiSummary] = useState("");
-    const [showSidebar, setShowSidebar] = useState(false);
-    const [uploading, setUploading] = useState(false);
-    const [generating, setGenerating] = useState(false);
-    const [searching, setSearching] = useState(false);
-    const [loadingDocs, setLoadingDocs] = useState(false);
+    const [documents, setDocuments] = useState([])
+    const [searchQuery, setSearchQuery] = useState("")
+    const [topKFiles, setTopKFiles] = useState(3)
+    const [topKChunks, setTopKChunks] = useState(5)
+    const [searchResult, setSearchResult] = useState("")
+    const [aiSummary, setAiSummary] = useState("")
+    const [showSidebar, setShowSidebar] = useState(false)
+    const [uploading, setUploading] = useState(false)
+    const [generating, setGenerating] = useState(false)
+    const [searching, setSearching] = useState(false)
+    const [loadingDocs, setLoadingDocs] = useState(false)
 
     const API_BASE = "http://127.0.0.1:8000";
 
-    useEffect(() => { fetchDocuments(); }, []);
+    useEffect(() => { fetchDocuments(); }, [])
 
     const fetchDocuments = async () => {
-        setLoadingDocs(true);
+        setLoadingDocs(true)
         try {
-            const res = await axios.get(`${API_BASE}/documents/details`);
-            setDocuments(res.data.documents);
+            const res = await axios.get(`${API_BASE}/documents/details`)
+            setDocuments(res.data.documents)
         } catch (err) {
-            toast.error(err.response?.data?.detail || "Failed to fetch documents.");
+            toast.error(err.response?.data?.detail || "Failed to fetch documents.")
         } finally {
-            setLoadingDocs(false);
+            setLoadingDocs(false)
         }
-    };
+    }
 
     const handleUpload = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        setUploading(true);
-        const formData = new FormData();
-        formData.append("file", file);
+        const file = e.target.files[0]
+        if (!file) return
+        setUploading(true)
+        const formData = new FormData()
+        formData.append("file", file)
         try {
-            await axios.post(`${API_BASE}/upload`, formData);
-            fetchDocuments();
-            toast.success("File uploaded successfully");
+            await axios.post(`${API_BASE}/upload`, formData)
+            fetchDocuments()
+            toast.success("File uploaded successfully")
         } catch (err) {
-            toast.error(err.response?.data?.detail || "Upload failed.");
+            toast.error(err.response?.data?.detail || "Upload failed.")
         } finally {
-            setUploading(false);
+            setUploading(false)
         }
-    };
+    }
 
     const handleSearch = async () => {
         if (!searchQuery.trim()) return;
-        setSearchResult("");
-        setAiSummary("");
-        setSearching(true);
+        setSearchResult("")
+        setAiSummary("")
+        setSearching(true)
         try {
             const res = await axios.get(`${API_BASE}/search`, {
                 params: { query: searchQuery, top_k_files: topKFiles, top_k_chunks: topKChunks }
-            });
-            setSearchResult(res.data || "");
+            })
+            setSearchResult(res.data || "")
         } catch (err) {
-            toast.error(err.response?.data?.detail || "Search failed.");
+            toast.error(err.response?.data?.detail || "Search failed.")
         } finally {
-            setSearching(false);
+            setSearching(false)
         }
-    };
+    }
 
     const handleAiSummary = async () => {
         if (!searchResult) return;
@@ -81,7 +81,7 @@ export default function SearchAISummary() {
         } finally {
             setGenerating(false);
         }
-    };
+    }
 
     const handleDelete = async (fileId) => {
         try {
@@ -91,22 +91,19 @@ export default function SearchAISummary() {
         } catch (err) {
             toast.error(err.response?.data?.detail || "Delete failed.");
         }
-    };
+    }
 
     const renderTooltip = (msg) => <Tooltip>{msg}</Tooltip>;
 
     return (
         <div className="dashboard-wrapper">
-            {/* Hot toast container */}
             <Toaster position="top-right" reverseOrder={false} />
 
-            {/* Top Bar */}
             <motion.div className="top-bar-container"
                 initial={{ y: -60, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}
             >
-                {/* Row 1: Search + Icons */}
                 <div className="top-bar-row top-bar-row-1">
                     <input
                         type="text"
@@ -141,7 +138,6 @@ export default function SearchAISummary() {
                     </div>
                 </div>
 
-                {/* Row 2: Top K inputs */}
                 <div className="top-bar-row top-bar-row-2 my-2">
                     <div className="topk-input-wrapper">
                         <span className="topk-label">Files</span>
@@ -226,8 +222,6 @@ export default function SearchAISummary() {
             </div>
 
 
-
-            {/* Knowledge Base Sidebar */}
             <Offcanvas show={showSidebar} onHide={() => setShowSidebar(false)} placement="end" className="kb-offcanvas">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>Knowledge Base</Offcanvas.Title>
@@ -258,5 +252,5 @@ export default function SearchAISummary() {
                 </Offcanvas.Body>
             </Offcanvas>
         </div>
-    );
+    )
 }

@@ -1,13 +1,14 @@
 import { useState } from "react"
 import ResumeScorer from "./ResumeScorer/index"
 import Search from "./Search/index"
-
+import Chatbot from "./Chatbot/index"
 import './style.css'
 
 export default function App() {
-  const [activeMenu, setActiveMenu] = useState("searchAISummary")
+  const [activeMenu, setActiveMenu] = useState("Chatbot")
 
   const menuItems = [
+    { key: "Chatbot", label: "Chatbot" },
     { key: "searchAISummary", label: "Search & AI Summary" },
     { key: "resume-scorer", label: "Resume Scorer" },
   ]
@@ -35,6 +36,7 @@ export default function App() {
       </nav>
 
       <div className="main-content">
+        {activeMenu == "Chatbot" && <Chatbot />}
         {activeMenu == "searchAISummary" && <Search />}
         {activeMenu == "resume-scorer" && <ResumeScorer />}
       </div>
