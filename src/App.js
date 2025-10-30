@@ -5,7 +5,7 @@ import Chatbot from "./Chatbot/index"
 import './style.css'
 
 export default function App() {
-  const [activeMenu, setActiveMenu] = useState("Chatbot")
+  const [activeMenu, setActiveMenu] = useState("searchAISummary")
 
   const menuItems = [
     { key: "Chatbot", label: "Chatbot" },
